@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Table</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <div class="search-container">
+      <input
+        id="playlistIdInput"
+        class="search-box"
+        type="search"
+        placeholder="Type Your Playlist ID Here"
+      />
+      <button class="search-btn" id="searchButton">Search</button>
+    </div>
+    <div class="table" id="dynamicTable">
+      <div class="table-row">
+        <div class="table-cell">#</div>
+        <div class="table-cell">TITLE</div>
+        <div class="table-cell toggle-content">DESCRIPTION</div>
+        <div class="table-cell">THUMBNAIL</div>
+        <div class="table-cell">DATE</div>
+        <div class="table-cell">PUBLISH DATE</div>
+      </div>
+    </div>
+    <div class="videoCount"></div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
