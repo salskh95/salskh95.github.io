@@ -1,49 +1,121 @@
+let playlistId = "";
 const apiKey = "AIzaSyCKHytj5BTTR324N9R4NXnud41v1vhYwiw";
 const table = document.getElementById("dynamicTable");
 const videoCountElement = document.querySelector(".videoCount");
 
-async function fetchData(url) {
-  const response = await fetch(url);
-  const data = await response.json();
-  loopThroughData(data.items);
-
-  if (data.nextPageToken) {
-    const nextPageUrl = `${url}&pageToken=${data.nextPageToken}`;
-    await fetchData(nextPageUrl);
-  }
+function fetchData(url) {
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      const videos = data.items;
+      renderVideos(videos);
+      videoCountElement.innerHTML = `Total Videos: ${videos.length}`;
+    });
 }
 
-function loopThroughData(videos) {
-  let videoCount = 0;
+function renderVideos(videos) {
   videos.forEach((video, index) => {
     const newRow = document.createElement("div");
     newRow.classList.add("table-row");
+
+    const numberCell = document.createElement("div");
+    numberCell.classList.add("table-cell", "table-number");
+    numberCell.textContent = index + 1;
+    newRow.appendChild(numberCell);
+
+    const titleCell = document.createElement("div");
+    titleCell.classList.add("table-cell");
+    titleCell.textContent = video.snippet.title;
+
     if (
       video?.snippet?.title === "Private video" ||
       video?.snippet?.title === "Deleted video"
     ) {
       newRow.classList.add("unavailable-video");
     }
-    const cellDataArray = [
-      index + 1,
-      video.snippet.title,
-      video.snippet.description,
-      `<a href="https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}" target="_blank"><img src=${video.snippet.thumbnails?.medium?.url} /></a>`,
-      video.snippet.publishedAt,
-      video.contentDetails.videoPublishedAt,
-    ];
-    cellDataArray.forEach((cellData) => {
-      const cell = document.createElement("div");
-      cell.classList.add("table-cell");
-      cell.innerHTML = cellData;
-      newRow.appendChild(cell);
+
+    newRow.appendChild(titleCell);
+
+    const descriptionCell = document.createElement("div");
+    descriptionCell.classList.add("table-cell");
+
+    const truncatedText = document.createElement("div");
+    truncatedText.classList.add("truncated-text");
+    truncatedText.textContent = truncateText(video.snippet.description, 150);
+    descriptionCell.appendChild(truncatedText);
+
+    const expandedText = document.createElement("div");
+    expandedText.classList.add("expanded-text");
+    expandedText.textContent = video.snippet.description;
+    expandedText.style.display = "none";
+    descriptionCell.appendChild(expandedText);
+
+    const showMoreLink = document.createElement("a");
+    showMoreLink.textContent = "Show more";
+    showMoreLink.href = "#";
+    showMoreLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      truncatedText.style.display = "none";
+      expandedText.style.display = "block";
+      showMoreLink.style.display = "none";
+      showLessLink.style.display = "inline";
     });
+    descriptionCell.appendChild(showMoreLink);
+
+    const showLessLink = document.createElement("a");
+    showLessLink.classList.add("show-less-link");
+    showLessLink.textContent = "Show less";
+    showLessLink.href = "#";
+    showLessLink.style.display = "none";
+    showLessLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      truncatedText.style.display = "block";
+      expandedText.style.display = "none";
+      showMoreLink.style.display = "inline";
+      showLessLink.style.display = "none";
+    });
+    descriptionCell.appendChild(showLessLink);
+
+    newRow.appendChild(descriptionCell);
+
+    const thumbnailCell = document.createElement("div");
+    thumbnailCell.classList.add("table-cell");
+    thumbnailCell.innerHTML = `<a href="https://www.youtube.com/watch?v=${video.snippet.resourceId.videoId}" target="_blank"><img src=${video.snippet.thumbnails?.medium?.url} /></a>`;
+    newRow.appendChild(thumbnailCell);
+
+    const dateCell = document.createElement("div");
+    dateCell.classList.add("table-cell");
+    dateCell.textContent = formatDateTime(video.snippet.publishedAt);
+    newRow.appendChild(dateCell);
+
+    const publishDateCell = document.createElement("div");
+    publishDateCell.classList.add("table-cell");
+    publishDateCell.textContent = formatDateTime(
+      video.contentDetails.videoPublishedAt
+    );
+    newRow.appendChild(publishDateCell);
+
     table.appendChild(newRow);
-    videoCount++;
-    console.log(videoCount);
+
+    function formatDateTime(dateTimeString) {
+      const options = {
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      };
+      const date = new Date(dateTimeString);
+      return date.toLocaleString("en-US", options);
+    }
+
+    function truncateText(text, maxLength) {
+      if (text.length > maxLength) {
+        return text.slice(0, maxLength) + "...";
+      }
+      return text;
+    }
   });
-  videoCountElement.textContent = `Total Videos: ${videoCount}`;
-  table.appendChild(videoCountElement);
 }
 
 function searchPlaylist() {
@@ -51,7 +123,7 @@ function searchPlaylist() {
   if (playlistIdInput) {
     const newUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?key=${apiKey}&playlistId=${playlistIdInput}&part=snippet%2CcontentDetails&maxResults=1000&fields=nextPageToken,items(snippet(title,position,description,resourceId(videoId),thumbnails(medium(url)),publishedAt),contentDetails(videoPublishedAt))`;
 
-    table.innerHTML = "";
+    // table.innerHTML = "";
     fetchData(newUrl);
     document.getElementById("playlistIdInput").value = "";
   }
