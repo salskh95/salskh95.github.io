@@ -123,7 +123,6 @@ function searchPlaylist() {
   if (playlistIdInput) {
     const newUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?key=${apiKey}&playlistId=${playlistIdInput}&part=snippet%2CcontentDetails&maxResults=1000&fields=nextPageToken,items(snippet(title,position,description,resourceId(videoId),thumbnails(medium(url)),publishedAt),contentDetails(videoPublishedAt))`;
 
-    // table.innerHTML = "";
     fetchData(newUrl);
     document.getElementById("playlistIdInput").value = "";
   }
