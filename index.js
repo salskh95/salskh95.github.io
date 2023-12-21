@@ -39,42 +39,44 @@ function renderVideos(videos) {
     const descriptionCell = document.createElement("div");
     descriptionCell.classList.add("table-cell");
 
-    const truncatedText = document.createElement("div");
-    truncatedText.classList.add("truncated-text");
-    truncatedText.textContent = truncateText(video.snippet.description, 150);
-    descriptionCell.appendChild(truncatedText);
+    if (video.snippet.description.length > 0) {
+      const truncatedText = document.createElement("div");
+      truncatedText.classList.add("truncated-text");
+      truncatedText.textContent = truncateText(video.snippet.description, 150);
+      descriptionCell.appendChild(truncatedText);
 
-    const expandedText = document.createElement("div");
-    expandedText.classList.add("expanded-text");
-    expandedText.textContent = video.snippet.description;
-    expandedText.style.display = "none";
-    descriptionCell.appendChild(expandedText);
-
-    const showMoreLink = document.createElement("a");
-    showMoreLink.textContent = "Show more";
-    showMoreLink.href = "#";
-    showMoreLink.addEventListener("click", (event) => {
-      event.preventDefault();
-      truncatedText.style.display = "none";
-      expandedText.style.display = "block";
-      showMoreLink.style.display = "none";
-      showLessLink.style.display = "inline";
-    });
-    descriptionCell.appendChild(showMoreLink);
-
-    const showLessLink = document.createElement("a");
-    showLessLink.classList.add("show-less-link");
-    showLessLink.textContent = "Show less";
-    showLessLink.href = "#";
-    showLessLink.style.display = "none";
-    showLessLink.addEventListener("click", (event) => {
-      event.preventDefault();
-      truncatedText.style.display = "block";
+      const expandedText = document.createElement("div");
+      expandedText.classList.add("expanded-text");
+      expandedText.textContent = video.snippet.description;
       expandedText.style.display = "none";
-      showMoreLink.style.display = "inline";
+      descriptionCell.appendChild(expandedText);
+
+      const showMoreLink = document.createElement("a");
+      showMoreLink.textContent = "Show more";
+      showMoreLink.href = "#";
+      showMoreLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        truncatedText.style.display = "none";
+        expandedText.style.display = "block";
+        showMoreLink.style.display = "none";
+        showLessLink.style.display = "inline";
+      });
+      descriptionCell.appendChild(showMoreLink);
+
+      const showLessLink = document.createElement("a");
+      showLessLink.classList.add("show-less-link");
+      showLessLink.textContent = "Show less";
+      showLessLink.href = "#";
       showLessLink.style.display = "none";
-    });
-    descriptionCell.appendChild(showLessLink);
+      showLessLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        truncatedText.style.display = "block";
+        expandedText.style.display = "none";
+        showMoreLink.style.display = "inline";
+        showLessLink.style.display = "none";
+      });
+      descriptionCell.appendChild(showLessLink);
+    }
 
     newRow.appendChild(descriptionCell);
 
