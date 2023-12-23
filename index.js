@@ -123,6 +123,7 @@ function renderVideos(videos) {
 function searchPlaylist() {
   const playlistIdInput = document.getElementById("playlistIdInput").value;
   if (playlistIdInput) {
+    table.innerHTML = "";
     const newUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?key=${apiKey}&playlistId=${playlistIdInput}&part=snippet%2CcontentDetails&maxResults=1000&fields=nextPageToken,items(snippet(title,position,description,resourceId(videoId),thumbnails(medium(url)),publishedAt),contentDetails(videoPublishedAt))`;
 
     fetchData(newUrl);
