@@ -18,13 +18,17 @@ function renderVideos(videos) {
     const newRow = document.createElement("div");
     newRow.classList.add("table-row");
 
+    if (index % 2 === 1) {
+      newRow.classList.add("alternate-row");
+    }
+
     const numberCell = document.createElement("div");
-    numberCell.classList.add("table-cell", "table-number");
+    numberCell.classList.add("table-cell", "table-number", "dynamic-cell");
     numberCell.textContent = index + 1;
     newRow.appendChild(numberCell);
 
     const titleCell = document.createElement("div");
-    titleCell.classList.add("table-cell");
+    titleCell.classList.add("table-cell", "dynamic-cell", "table-title");
     titleCell.textContent = video.snippet.title;
 
     if (
@@ -37,12 +41,14 @@ function renderVideos(videos) {
     newRow.appendChild(titleCell);
 
     const descriptionCell = document.createElement("div");
-    descriptionCell.classList.add("table-cell");
+    descriptionCell.classList.add("table-cell", "dynamic-cell");
 
     if (
       video.snippet.description.length > 0 &&
-      !video?.snippet?.title === "Private video" &&
-      !video?.snippet?.title === "Deleted video"
+      !(
+        video?.snippet?.title === "Private video" ||
+        video?.snippet?.title === "Deleted video"
+      )
     ) {
       const truncatedText = document.createElement("div");
       truncatedText.classList.add("truncated-text");
@@ -90,12 +96,12 @@ function renderVideos(videos) {
     newRow.appendChild(thumbnailCell);
 
     const dateCell = document.createElement("div");
-    dateCell.classList.add("table-cell");
+    dateCell.classList.add("table-cell", "dynamic-cell");
     dateCell.textContent = formatDateTime(video.snippet.publishedAt);
     newRow.appendChild(dateCell);
 
     const publishDateCell = document.createElement("div");
-    publishDateCell.classList.add("table-cell");
+    publishDateCell.classList.add("table-cell", "dynamic-cell");
 
     if (
       video.contentDetails &&
