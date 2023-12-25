@@ -26,7 +26,7 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 20px 15px 2px;
-  background-color: #f2f2f2;
+  background-color: rgba(97, 81, 238, 0.4);
 }
 
 .table-cell {

@@ -39,7 +39,11 @@ function renderVideos(videos) {
     const descriptionCell = document.createElement("div");
     descriptionCell.classList.add("table-cell");
 
-    if (video.snippet.description.length > 0) {
+    if (
+      video.snippet.description.length > 0 &&
+      !video?.snippet?.title === "Private video" &&
+      !video?.snippet?.title === "Deleted video"
+    ) {
       const truncatedText = document.createElement("div");
       truncatedText.classList.add("truncated-text");
       truncatedText.textContent = truncateText(video.snippet.description, 50);
@@ -92,9 +96,20 @@ function renderVideos(videos) {
 
     const publishDateCell = document.createElement("div");
     publishDateCell.classList.add("table-cell");
-    publishDateCell.textContent = formatDateTime(
-      video.contentDetails.videoPublishedAt
-    );
+
+    if (
+      video.contentDetails &&
+      video.contentDetails.videoPublishedAt &&
+      new Date(video.contentDetails.videoPublishedAt).toString() !==
+        "Invalid Date"
+    ) {
+      publishDateCell.textContent = formatDateTime(
+        video.contentDetails.videoPublishedAt
+      );
+    } else {
+      publishDateCell.textContent = "";
+    }
+
     newRow.appendChild(publishDateCell);
 
     table.appendChild(newRow);
@@ -120,10 +135,20 @@ function renderVideos(videos) {
   });
 }
 
+function removeChildExceptClass(parent, className) {
+  const children = Array.from(parent.children);
+  for (const child of children) {
+    if (!child.classList.contains(className)) {
+      parent.removeChild(child);
+    }
+  }
+}
+
 function searchPlaylist() {
   const playlistIdInput = document.getElementById("playlistIdInput").value;
   if (playlistIdInput) {
-    table.innerHTML = "";
+    const dynamicTable = document.getElementById("dynamicTable");
+    removeChildExceptClass(dynamicTable, "header-row");
     const newUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?key=${apiKey}&playlistId=${playlistIdInput}&part=snippet%2CcontentDetails&maxResults=1000&fields=nextPageToken,items(snippet(title,position,description,resourceId(videoId),thumbnails(medium(url)),publishedAt),contentDetails(videoPublishedAt))`;
 
     fetchData(newUrl);
