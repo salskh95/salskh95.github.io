@@ -2,6 +2,7 @@ let playlistId = "";
 const apiKey = "AIzaSyCKHytj5BTTR324N9R4NXnud41v1vhYwiw";
 const table = document.getElementById("dynamicTable");
 const videoCountElement = document.querySelector(".videoCount");
+videoCountElement.style.display = "none";
 
 function fetchData(url) {
   fetch(url)
@@ -14,6 +15,8 @@ function fetchData(url) {
 }
 
 function renderVideos(videos) {
+  const dynamicTable = document.getElementById("dynamicTable");
+  removeChildExceptClass(dynamicTable, "header-row");
   videos.forEach((video, index) => {
     const newRow = document.createElement("div");
     newRow.classList.add("table-row");
@@ -50,42 +53,41 @@ function renderVideos(videos) {
         video?.snippet?.title === "Deleted video"
       )
     ) {
-      const truncatedText = document.createElement("div");
-      truncatedText.classList.add("truncated-text");
-      truncatedText.textContent = truncateText(video.snippet.description, 50);
-      descriptionCell.appendChild(truncatedText);
-
-      const expandedText = document.createElement("div");
-      expandedText.classList.add("expanded-text");
-      expandedText.textContent = video.snippet.description;
-      expandedText.style.display = "none";
-      descriptionCell.appendChild(expandedText);
+      const descriptionText = document.createElement("div");
+      descriptionText.classList.add("truncated-text");
+      descriptionText.textContent = truncateText(video.snippet.description, 50);
+      descriptionCell.appendChild(descriptionText);
 
       const showMoreLink = document.createElement("a");
       showMoreLink.textContent = "Show more";
       showMoreLink.href = "#";
-      showMoreLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        truncatedText.style.display = "none";
-        expandedText.style.display = "block";
-        showMoreLink.style.display = "none";
-        showLessLink.style.display = "inline";
-      });
-      descriptionCell.appendChild(showMoreLink);
+      showMoreLink.classList.add("show-more-link");
 
-      const showLessLink = document.createElement("a");
-      showLessLink.classList.add("show-less-link");
-      showLessLink.textContent = "Show less";
-      showLessLink.href = "#";
-      showLessLink.style.display = "none";
-      showLessLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        truncatedText.style.display = "block";
-        expandedText.style.display = "none";
-        showMoreLink.style.display = "inline";
-        showLessLink.style.display = "none";
+      showMoreLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (descriptionText.classList.contains("truncated-text")) {
+          descriptionText.classList.remove("truncated-text");
+          descriptionText.classList.add("expanded-text");
+          descriptionText.textContent = video.snippet.description;
+          showMoreLink.textContent = "Show less";
+        } else {
+          descriptionText.classList.remove("expanded-text");
+          descriptionText.classList.add("truncated-text");
+          descriptionText.textContent = truncateText(
+            video.snippet.description,
+            50
+          );
+          showMoreLink.textContent = "Show more";
+        }
       });
-      descriptionCell.appendChild(showLessLink);
+
+      if (video.snippet.description.length > 50) {
+        showMoreLink.style.display = "inline";
+      } else {
+        showMoreLink.style.display = "none";
+      }
+
+      descriptionCell.appendChild(showMoreLink);
     }
 
     newRow.appendChild(descriptionCell);
@@ -96,12 +98,12 @@ function renderVideos(videos) {
     newRow.appendChild(thumbnailCell);
 
     const dateCell = document.createElement("div");
-    dateCell.classList.add("table-cell", "dynamic-cell");
+    dateCell.classList.add("table-cell", "dynamic-cell", "table-date");
     dateCell.textContent = formatDateTime(video.snippet.publishedAt);
     newRow.appendChild(dateCell);
 
     const publishDateCell = document.createElement("div");
-    publishDateCell.classList.add("table-cell", "dynamic-cell");
+    publishDateCell.classList.add("table-cell", "dynamic-cell", "table-date");
 
     if (
       video.contentDetails &&
@@ -159,6 +161,7 @@ function searchPlaylist() {
 
     fetchData(newUrl);
     document.getElementById("playlistIdInput").value = "";
+    videoCountElement.style.display = "block";
   }
 }
 

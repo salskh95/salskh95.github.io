@@ -33,6 +33,7 @@
 .table-row {
   display: flex;
   justify-content: space-between;
+  width: 100%;
   padding: 8px 10px 8px 10px;
   background-color: white;
 }
@@ -42,7 +43,7 @@
 }
 
 .table-cell {
-  flex: 1;
+  width: 16%;
   text-align: center;
   max-height: fit-content;
   padding-left: 24px;
@@ -59,7 +60,7 @@
 }
 
 .table-number {
-  max-width: 60px;
+  max-width: 3%;
   font-weight: bold;
 }
 
@@ -89,13 +90,11 @@
 .truncated-text {
   text-align: left;
   overflow: hidden;
-  max-height: max-content;
-  height: auto;
 }
 
 .expanded-text {
-  display: none;
   text-align: left;
+  word-wrap: break-word;
 }
 
 .show-more-link {
@@ -104,7 +103,10 @@
 }
 
 .videoCount {
-  padding: 8px 20px;
+  width: 100%;
+  padding-left: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   font-weight: bold;
   color: rgb(57, 55, 85);
   background-color: rgb(221, 220, 236);
