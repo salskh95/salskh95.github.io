@@ -99,16 +99,28 @@
 .dynamic-cell {
   color: rgb(57, 55, 85);
   font-family: "Martel", serif;
-}
-
-.truncated-text {
-  text-align: left;
+  max-height: 50px;
   overflow: hidden;
 }
 
-.expanded-text {
-  text-align: left;
-  word-wrap: break-word;
+.dynamic-cell .inactive {
+  max-height: 50px;
+  overflow: hidden;
+}
+
+.dynamic-cell .show-more-link {
+  color: blue;
+  cursor: pointer;
+  display: block;
+}
+
+.dynamic-cell .show-more-link:hover {
+  text-decoration: underline;
+}
+
+.dynamic-cell .active {
+  max-height: none;
+  overflow: visible;
 }
 
 .show-more-link {

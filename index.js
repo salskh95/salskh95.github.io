@@ -27,12 +27,12 @@ function formatDateTime(dateTimeString) {
   return date.toLocaleString("en-US", options);
 }
 
-function truncateText(text, maxLength) {
-  if (text.length > maxLength) {
-    return text.slice(0, maxLength) + "...";
-  }
-  return text;
-}
+// function truncateText(text, maxLength) {
+//   if (text.length > maxLength) {
+//     return text.slice(0, maxLength) + "...";
+//   }
+//   return text;
+// }
 
 function removeChildExceptClass(parent, className) {
   const children = Array.from(parent.children);
@@ -67,10 +67,7 @@ function renderVideos(videos) {
     <div class="table-cell dynamic-cell">
     ${
       video.snippet.description.length > 0 && !isPrivateOrDeleted
-        ? `<div class="truncated-text">${truncateText(
-            video.snippet.description,
-            50
-          )}</div>
+        ? `<div class="inactive">${video.snippet.description}</div>
         <a href="#" class="show-more-link">Show more</a>`
         : ""
     }
@@ -118,5 +115,26 @@ document
   .addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
       searchPlaylist();
+    }
+  });
+
+document
+  .getElementById("dynamicTable")
+  .addEventListener("click", function (event) {
+    const showMoreLink = event.target.closest(".show-more-link");
+    if (showMoreLink) {
+      event.preventDefault();
+
+      const descriptionContainer = showMoreLink.parentElement.querySelector(
+        ".dynamic-cell .inactive"
+      );
+      if (descriptionContainer) {
+        descriptionContainer.classList.toggle("inactive");
+        showMoreLink.innerHTML = descriptionContainer.classList.contains(
+          "inactive"
+        )
+          ? "Show more"
+          : "Show less";
+      }
     }
   });
