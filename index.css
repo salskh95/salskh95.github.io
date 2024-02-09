@@ -103,24 +103,16 @@
   overflow: hidden;
 }
 
-.dynamic-cell .inactive {
-  max-height: 50px;
-  overflow: hidden;
-}
-
-.dynamic-cell .show-more-link {
-  color: blue;
-  cursor: pointer;
-  display: block;
-}
-
-.dynamic-cell .show-more-link:hover {
-  text-decoration: underline;
-}
-
-.dynamic-cell .active {
+.description-text {
   max-height: none;
-  overflow: visible;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description-text.active {
+  max-height: none;
+  overflow-y: scroll;
 }
 
 .show-more-link {

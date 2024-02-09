@@ -27,13 +27,6 @@ function formatDateTime(dateTimeString) {
   return date.toLocaleString("en-US", options);
 }
 
-// function truncateText(text, maxLength) {
-//   if (text.length > maxLength) {
-//     return text.slice(0, maxLength) + "...";
-//   }
-//   return text;
-// }
-
 function removeChildExceptClass(parent, className) {
   const children = Array.from(parent.children);
   for (const child of children) {
@@ -66,9 +59,17 @@ function renderVideos(videos) {
     }</div>
     <div class="table-cell dynamic-cell">
     ${
-      video.snippet.description.length > 0 && !isPrivateOrDeleted
-        ? `<div class="inactive">${video.snippet.description}</div>
-        <a href="#" class="show-more-link">Show more</a>`
+      isPrivateOrDeleted
+        ? video.snippet.description
+        : `<div class="description-text">${
+            video.snippet.description.length > 50
+              ? video.snippet.description.substring(0, 50) + "..."
+              : video.snippet.description
+          }</div>`
+    }
+    ${
+      video.snippet.description.length > 50
+        ? `<a href="#" class="show-more-link">Show more</a>`
         : ""
     }
     </div>
@@ -89,7 +90,19 @@ function renderVideos(videos) {
       }</div>
       `;
     rowsContainer.appendChild(newRow);
+
+    const showMoreLink = newRow.querySelector(".show-more-link");
+    if (showMoreLink) {
+      showMoreLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        const descriptionText = newRow.querySelector(".description-text");
+        const isActive = descriptionText.classList.contains("active");
+        descriptionText.classList.toggle("active", !isActive);
+        showMoreLink.textContent = isActive ? "Show less" : "Show more";
+      });
+    }
   });
+
   dynamicTable.appendChild(rowsContainer);
 }
 
@@ -115,26 +128,5 @@ document
   .addEventListener("keypress", function (e) {
     if (e.key === "Enter") {
       searchPlaylist();
-    }
-  });
-
-document
-  .getElementById("dynamicTable")
-  .addEventListener("click", function (event) {
-    const showMoreLink = event.target.closest(".show-more-link");
-    if (showMoreLink) {
-      event.preventDefault();
-
-      const descriptionContainer = showMoreLink.parentElement.querySelector(
-        ".dynamic-cell .inactive"
-      );
-      if (descriptionContainer) {
-        descriptionContainer.classList.toggle("inactive");
-        showMoreLink.innerHTML = descriptionContainer.classList.contains(
-          "inactive"
-        )
-          ? "Show more"
-          : "Show less";
-      }
     }
   });
