@@ -1,0 +1,25 @@
+• გიტ კომიტები ცადე უფრო აღწერით იყოს, დააკონკრეტე რა შეცვალე მაგ კომიტში. "Changed background color", "Added search functionality", "Fix რამე ბაგის სახელი"
+• რო ვსერჩავ პირველ 50ზე მეტ ვიდეოს არ აბრუნებს.
+• alternate-row ზე ფერებს რო ანაცვლებ კაია, უბრალოდ ეგ მარტო ცსს-ით შეგიძლია ელემენტი:nth-child(odd) (ან even) სელექტორით შეგიძლია მონიშნო ყველა კენტი ან ლუწი. ზოგადად ცადე ჯერ ყველაფერი css და ჰტმლ-ით გადაჭრა და რაც რთულდება ან არ გამოდის ეგენი უკვე Js-ით.
+• ახალი როუები უფრო მარტივად შეგიძლია template literal-ით (ეს დასერჩე) დაამატო. newRow-ს რომ გააკეთებ მერე შეგიძლია:
+newRow.setHTML(`
+  <table-cell class="tabe-cell table-number">${index + 1}</table-cell>
+  <table-cell class="table-cell">${video.snippet.description}</table-cell>
+`);
+ესე ჯობია იმიტო რო ერთად ხდება მთელი როუს შექმნა და ყველაფერი უფრო თვალსაჩიონოა. setHtml ში რო სტრინგია მანდ ცვლადები და ჯს ოპერაციები რომ გააკეთო ჩეულებრივი ბრჭყალების ("" ან '') მაგივრად `` ეს ბრჭყალები უნდა გამოიყენო. `value is ${ someVariable + 2}`
+ვერი იუსფულ. შეგიძლია პირობებიც ჩასვა (ternary operator) `class="${value === true ? 'active' : ''}"`.
+• ფუნქციაში ფუნქცია არ დაადეკლარირო (formatDateTime და truncateText)
+• გაფართოებული ტექსტი თუ დიდია ძაან დაბლა ჩადის. max-height: გაუწერე და overflow-y: scroll.
+
+
+
+    // const showMoreLink = newRow.querySelector(".show-more-link");
+    // if (showMoreLink) {
+    //   showMoreLink.addEventListener("click", function (e) {
+    //     e.preventDefault();
+    //     const descriptionText = newRow.querySelector(".description-text");
+    //     const isActive = descriptionText.classList.contains("active");
+    //     descriptionText.classList.toggle("active", !isActive);
+    //     showMoreLink.textContent = isActive ? "Show less" : "Show more";
+    //   });
+    // }

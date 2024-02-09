@@ -93,13 +93,7 @@ function renderVideos(videos) {
 
     const showMoreLink = newRow.querySelector(".show-more-link");
     if (showMoreLink) {
-      showMoreLink.addEventListener("click", function (e) {
-        e.preventDefault();
-        const descriptionText = newRow.querySelector(".description-text");
-        const isActive = descriptionText.classList.contains("active");
-        descriptionText.classList.toggle("active", !isActive);
-        showMoreLink.textContent = isActive ? "Show less" : "Show more";
-      });
+      showMoreLink.addEventListener("click", toggleDescription);
     }
   });
 
@@ -116,6 +110,22 @@ function searchPlaylist() {
     fetchData(newUrl);
     document.getElementById("playlistIdInput").value = "";
     videoCountElement.style.display = "block";
+  }
+}
+
+function toggleDescription(e) {
+  e.preventDefault();
+  const showMoreLink = e.target;
+  const descriptionText =
+    showMoreLink.parentElement.querySelector(".description-text");
+  const isActive = descriptionText.classList.contains("active");
+
+  if (!isActive) {
+    descriptionText.classList.add("active");
+    showMoreLink.textContent = "Show less";
+  } else {
+    descriptionText.classList.remove("active");
+    showMoreLink.textContent = "Show more";
   }
 }
 

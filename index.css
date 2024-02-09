@@ -65,7 +65,7 @@
 
 .table-cell img {
   max-width: 100%;
-  max-height: 100%;
+  /* max-height: 100%; */
   object-fit: cover;
 }
 
@@ -99,12 +99,11 @@
 .dynamic-cell {
   color: rgb(57, 55, 85);
   font-family: "Martel", serif;
-  max-height: 50px;
+  /* max-height: 50px; */
   overflow: hidden;
 }
 
 .description-text {
-  max-height: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
