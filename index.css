@@ -110,7 +110,8 @@
 }
 
 .description-text.active {
-  overflow: visible;
+  max-height: 110px;
+  overflow-y: scroll;
   white-space: normal;
 }
 
