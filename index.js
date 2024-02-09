@@ -58,20 +58,12 @@ function renderVideos(videos) {
       video.snippet.title
     }</div>
     <div class="table-cell dynamic-cell">
-    ${
-      isPrivateOrDeleted
-        ? video.snippet.description
-        : `<div class="description-text">${
-            video.snippet.description.length > 50
-              ? video.snippet.description.substring(0, 50) + "..."
-              : video.snippet.description
-          }</div>`
-    }
-    ${
-      video.snippet.description.length > 50
-        ? `<a href="#" class="show-more-link">Show more</a>`
-        : ""
-    }
+  <div class="description-text">${video.snippet.description}</div>
+  ${
+    video.snippet.description.length > 50
+      ? `<a href="#" class="show-more-link">Show more</a>`
+      : ""
+  }
     </div>
     <div class="table-cell">
     <a href="https://www.youtube.com/watch?v=${

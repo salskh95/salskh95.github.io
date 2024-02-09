@@ -110,8 +110,8 @@
 }
 
 .description-text.active {
-  max-height: none;
-  overflow-y: scroll;
+  overflow: visible;
+  white-space: normal;
 }
 
 .show-more-link {
