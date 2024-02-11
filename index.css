@@ -57,7 +57,7 @@
 }
 
 .table-cell {
-  width: 16%;
+  width: 10%;
   text-align: center;
   max-height: fit-content;
   padding: 4px;
@@ -74,8 +74,13 @@
 }
 
 .table-number {
-  max-width: 3%;
+  max-width: 5%;
   font-weight: bold;
+}
+
+.header-cell,
+.table-cell:not(.table-number) {
+  flex: 1;
 }
 
 .header-cell {
@@ -111,7 +116,7 @@
 
 .description-text.active {
   max-height: 110px;
-  overflow-y: scroll;
+  overflow-y: auto;
   white-space: normal;
 }
 
@@ -121,13 +126,10 @@
 }
 
 .videoCount {
-  width: 100%;
-  padding-left: 8px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  display: inline-block;
+  padding: 4px 8px;
   font-weight: bold;
   color: rgb(57, 55, 85);
-  background-color: rgb(221, 220, 236);
 }
 
 .unavailable-video {

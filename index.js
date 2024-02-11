@@ -22,7 +22,7 @@ function fetchData(url) {
 }
 
 function setVideoCount(n) {
-  videoCountElement.innerHTML = `Total Videos: ${n}`;
+  videoCountElement.innerHTML = `TOTAL VIDEOS: ${n}`;
 }
 
 function formatDateTime(dateTimeString) {
@@ -107,6 +107,9 @@ function searchPlaylist() {
   if (playlistIdInput) {
     const dynamicTable = document.getElementById("dynamicTable");
     removeChildExceptClass(dynamicTable, "header-row");
+
+    videos = [];
+
     playlistUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?key=${apiKey}&playlistId=${playlistIdInput}&part=snippet%2CcontentDetails&maxResults=1000&fields=nextPageToken,items(snippet(title,position,description,resourceId(videoId),thumbnails(medium(url)),publishedAt),contentDetails(videoPublishedAt))`;
 
     fetchData(playlistUrl);
