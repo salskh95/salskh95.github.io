@@ -1,18 +1,28 @@
 let playlistId = "";
+let playlistUrl = "";
 const apiKey = "AIzaSyCKHytj5BTTR324N9R4NXnud41v1vhYwiw";
 const table = document.getElementById("dynamicTable");
 const videoCountElement = document.querySelector(".videoCount");
 let isPrivateOrDeleted = false;
 videoCountElement.style.display = "none";
+let videos = [];
 
 function fetchData(url) {
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
-      const videos = data.items;
-      renderVideos(videos);
-      videoCountElement.innerHTML = `Total Videos: ${videos.length}`;
+      videos.push(...data.items);
+      if (data.nextPageToken) {
+        fetchData(`${playlistUrl}&pageToken=${data.nextPageToken}`);
+      } else {
+        renderVideos(videos);
+        setVideoCount(videos.length);
+      }
     });
+}
+
+function setVideoCount(n) {
+  videoCountElement.innerHTML = `Total Videos: ${n}`;
 }
 
 function formatDateTime(dateTimeString) {
@@ -97,9 +107,9 @@ function searchPlaylist() {
   if (playlistIdInput) {
     const dynamicTable = document.getElementById("dynamicTable");
     removeChildExceptClass(dynamicTable, "header-row");
-    const newUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?key=${apiKey}&playlistId=${playlistIdInput}&part=snippet%2CcontentDetails&maxResults=1000&fields=nextPageToken,items(snippet(title,position,description,resourceId(videoId),thumbnails(medium(url)),publishedAt),contentDetails(videoPublishedAt))`;
+    playlistUrl = `https://youtube.googleapis.com/youtube/v3/playlistItems?key=${apiKey}&playlistId=${playlistIdInput}&part=snippet%2CcontentDetails&maxResults=1000&fields=nextPageToken,items(snippet(title,position,description,resourceId(videoId),thumbnails(medium(url)),publishedAt),contentDetails(videoPublishedAt))`;
 
-    fetchData(newUrl);
+    fetchData(playlistUrl);
     document.getElementById("playlistIdInput").value = "";
     videoCountElement.style.display = "block";
   }
